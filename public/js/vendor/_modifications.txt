@@ -1,0 +1,3 @@
+# SIM.JS
+
+random.js contents have been removed from the bottom of the file due to how requireJS works.

@@ -1,0 +1,46 @@
+<div class="left">
+	<h1>Simulation configuration</h1>
+	<form id="simulation-config" action="#">
+		<fieldset>
+			<legend>World</legend>
+			<label for="simulation-config-seed">Seed</label><br />
+			<input id="simulation-config-seed" type="number" name="seed" value="{{ defaults.seed }}" title="Must be an integer!"><br />
+			<label for="simulation-config-duration">Duration</label><br />
+			<input id="simulation-config-duration" type="number" name="duration" value="{{ defaults.duration }}" title="Must be an integer!"><br />
+			<label for="simulation-config-hoursInDay">Hours in Day</label><br />
+			<input id="simulation-config-hoursInDay" type="number" name="hoursInDay" value="{{ defaults.hoursInDay }}" title="Must be a number!"><br />
+		</fieldset>
+		
+		<fieldset>
+			<legend>User Stories</legend>
+			<label for="simulation-config-stories">User Stories</label><br />
+			<input id="simulation-config-stories" type="number" name="stories" value="{{ defaults.stories }}" title="Must be an integer!"><br />
+			<label for="simulation-config-tasksPerStory">Tasks per User Story</label><br />
+			<input id="simulation-config-tasksPerStory" type="number" name="tasksPerStory" value="{{ defaults.tasksPerStory }}" title="Must be an integer!"><br />
+			<label for="simulation-config-effortPerTask">Effort per Task</label><br />
+			<input id="simulation-config-effortPerTask" type="number" name="effortPerTask" value="{{ defaults.effortPerTask }}" title="Must be an integer!"><br />
+		</fieldset>
+		<fieldset>
+			<legend>Sprint</legend>
+			<label for="simulation-config-daysPerSprint">Days per Sprint</label><br />
+			<input id="simulation-config-daysPerSprint" type="number" name="daysPerSprint" value="{{ defaults.daysPerSprint }}" title="Must be an integer!"><br />
+			<label for="simulation-config-effortPerSprint">Effort per Sprint</label><br />
+			<input id="simulation-config-effortPerSprint" type="number" name="effortPerSprint" value="{{ defaults.effortPerSprint }}" title="Must be an integer!"><br />
+			<label for="simulation-config-standUpMeetingLength">Stand-up meeting length (min)</label><br />
+			<input id="simulation-config-standUpMeetingLength" type="number" name="standUpMeetingLength" value="{{ defaults.standUpMeetingLength }}" title="Must be an integer!"><br />
+		</fieldset>
+		<fieldset>
+			<legend>Workers</legend>
+			<label for="simulation-config-workers">Workers</label><br />
+			<input id="simulation-config-workers" type="number" name="workers" value="{{ defaults.workers }}" title="Must be an integer!"><br />
+			<label for="simulation-config-workEffort">Effort per Hour</label><br />
+			<input id="simulation-config-workEffort" type="number" name="workEffort" value="{{ defaults.workEffort }}" title="Must be an integer!"><br />
+		</fieldset>
+		<button>Simulate</button>
+	</form>
+
+</div>
+<div class="right">
+	<h1>Simulation output</h1>
+	<ol id="output"></ol>
+</div>
