@@ -13,7 +13,7 @@
 
 ## Running development server:
 
-* `grunt dev`
+* `grunt serve`
 
 ## Building a relelase:
 

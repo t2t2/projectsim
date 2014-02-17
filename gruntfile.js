@@ -24,18 +24,6 @@ module.exports = function(grunt) {
 			},
 		},
 
-		replace: {
-			// Replace require.js tag with compiled
-			build: {
-				src: ['public/*.html'],
-				dest: 'build/public/',
-/*				replacements: [{
-					from: /<script data-main=\"(.*)\" src=\"js\/vendor\/require.js\"><\/script>/,
-					to: '<script src="$1"></script>',
-				}]
-*/			},
-		},
-
 		requirejs: {
 			// Compile js files into a single file
 			runner: {
@@ -65,7 +53,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-text-replace');
 
 
 	// Aliases
