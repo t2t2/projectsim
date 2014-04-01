@@ -3,7 +3,8 @@ define(function (require) {
 	var _ = require('lodash'),
 	    Sim = require('sim'),
 	    UserStory = require('simulation/objects/userstory'),
-	    Task = require('simulation/objects/task');
+	    Task = require('simulation/objects/task'),
+	    InputException = require('InputException');
 
 	return {
 		name: 'Manager',
@@ -21,11 +22,17 @@ define(function (require) {
 			_.times(this.sim.config.stories, function (n) {
 				var story = new UserStory('Story '+n);
 				// Also generate tasks
-				_.times(this.sim.config.tasksPerStory, function (n) {
-					var task = new Task('Task '+n, this.sim.config.effortPerTask);
+				var taskCount = Math.round(this.sim.random.tasks.normal(this.sim.config.tasksPerStory, this.sim.config.tasksPerStorySigma));
+
+				_.times(taskCount, function (n) {
+					var effort = Math.round(this.sim.random.effort.normal(this.sim.config.effortPerTask, this.sim.config.effortSigma));
+
+					var task = new Task(story.name+' - Task '+n, effort);
 					story.addTask(task);
 				}, this);
 
+				this.sim.userStories.push(story);
+				// Also add to product backlog
 				this.pushQueue(this.sim.productBacklog, story);
 			}, this);
 		},
@@ -34,27 +41,26 @@ define(function (require) {
 			this.sprint++;
 			this.day = 0;
 			this.log('Sprint '+this.sprint+' - Planning Meeting');
-			// Choose stories to add to sprint backlog
-			var totalEffort = 0;
-			while(!this.sim.productBacklog.empty()) {
-				var nextStory = this.sim.productBacklog.top();
-				if(totalEffort + nextStory.estimatedEffort > this.sim.config.effortPerSprint) {
-					break; // Bust our limit
-				}
-				nextStory = this.shiftQueue(this.sim.productBacklog);
 
-				this.log('Adding '+nextStory.name+' to sprint backlog');
-				this.pushQueue(this.sim.sprintBacklog, nextStory);
-
-				// And add it's incomplete tasks to sprint tasks
-				_(nextStory.tasks).filter({completed: false}).forEach(function (task) {
-					this.pushQueue(this.sim.sprintTasks, task);
-				}, this);
-
-				totalEffort += nextStory.estimatedEffort;
-			}
-
+			// Schedule next day
 			this.setTimer(1 + this.sim.minsToDays(1)).done(this.nextDay);
+			
+			// User input: Choose stories
+			throw new InputException('sprint-planning');
+
+		},
+
+		addToBacklog: function (story) {
+			this.takeFromQueue(this.sim.productBacklog, story);
+			
+			story.chosen = true;
+			this.log('Adding '+story.name+' to sprint backlog');
+			this.pushQueue(this.sim.sprintBacklog, story);
+
+			// And add it's incomplete tasks to sprint tasks
+			_(story.tasks).filter({completed: false}).forEach(function (task) {
+				this.pushQueue(this.sim.sprintTasks, task);
+			}, this);
 		},
 
 		nextDay: function () {
@@ -77,6 +83,9 @@ define(function (require) {
 			// standUpMeetingLength mins later...
 			this.setTimer(this.sim.minsToDays(this.sim.config.standUpMeetingLength - 1))
 			    .done(this.getToWork);
+
+			// Hand it back to UI
+			throw new InputException('standup-meeting');
 		},
 
 		sprintReview: function () {
@@ -85,6 +94,12 @@ define(function (require) {
 			var totalStories = this.sim.sprintBacklog.size();
 			var storiesByStatus = _.groupBy(this.sim.sprintBacklog.data, 'completed');
 			
+			var eventData = {
+				totalStories: totalStories,
+				completedStories: storiesByStatus[true] ? storiesByStatus[true] : [],
+				incompleteStories: storiesByStatus[false] ? storiesByStatus[false] : [],
+			};
+
 			this.log('Total User Stories: '+totalStories);
 			this.log('User Stories completed: '+_.size(storiesByStatus[true]));
 			this.log('User Stories incomplete: '+_.size(storiesByStatus[false]));
@@ -106,6 +121,7 @@ define(function (require) {
 				this.setTimer(this.sim.toNextDay()).done(this.nextSprint);
 			}
 
+			throw new InputException('sprint-review', '', eventData);
 		},
 
 		getToWork: function () {

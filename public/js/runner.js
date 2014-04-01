@@ -7,14 +7,14 @@ require.config({
 		'lodash': 'vendor/lodash',
 		'mustache': 'vendor/mustache',
 		'random': 'vendor/random-0.26-debug',
-		'sim': 'vendor/sim-0.26-debug',
+		'vendor/sim': 'vendor/sim-0.26-debug',
 		'text': 'vendor/text',
 	},
 	shim: {
 		'random': {
 			exports: 'Random',
 		},
-		'sim': {
+		'vendor/sim': {
 			exports: 'Sim',
 		},
 		'jquery.serializeJSON': ['jquery'],

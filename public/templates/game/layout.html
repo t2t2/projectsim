@@ -1,0 +1,33 @@
+<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="#" class="navbar-brand">Project Simulation Game</a>
+		</div>
+	</div>
+</nav>
+
+<div id="container" class="">
+	
+</div>
+
+<div id="modal-intro" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Project Simulation Game</h4>
+			</div>
+			<div class="modal-body">
+				<h4>Scenario Selection</h4>
+				<p>Choose a scenario to play</p>
+				<div id="scenario-list" class="list-group">
+					{{#scenarios}}
+						<a data-scenario="{{key}}" class="list-group-item" href="#">
+							<h4 class="list-group-item-heading">{{name}}</h4>
+							<p class="list-group-item-text">{{description}}</p>
+						</a>
+					{{/scenarios}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

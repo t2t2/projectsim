@@ -6,6 +6,7 @@ define(function (require) {
 		this.tasks = [];
 		this.estimatedEffort = 0;
 		this.completed = false;
+		this.chosen = false;
 	}
 
 	UserStory.prototype.addTask = function(task) {

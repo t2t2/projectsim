@@ -1,0 +1,81 @@
+#container {
+	position: absolute;
+	top: 60px;
+	bottom: 0px;
+	left: 0;
+	right: 0;
+
+	padding: 0 20px;
+}
+.max-height {
+	height: 100%;
+}
+#user-stories-panel {
+	bottom: 0;
+	left: 15px;
+	position: absolute;
+	right: 15px;
+	top: 0;
+	
+}
+#user-stories-panel>.panel-body {
+	position: absolute;
+	top: 41px;
+	bottom: 110px;
+	padding-top: 0;
+	padding-bottom: 0;
+	overflow-y: auto;
+	width: 100%;
+}
+#user-stories-panel>.panel-footer {
+	position: absolute;
+	bottom: 0px;
+
+	min-height: 110px;
+	width: 100%;
+}
+#user-stories-list {
+	height: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+
+#chart-panel, #workers-panel, #log-panel {
+	left: 15px;
+	position: absolute;
+	right: 15px;
+}
+#workers-panel>.panel-body, #log-panel {
+	overflow-y: scroll;
+}
+
+#chart-panel {
+	height: 150px;
+	top: 0;
+}
+#workers-panel {
+	bottom: 210px;
+	top: 160px;
+}
+#workers-panel>.panel-body {
+	bottom: 0;
+	position: absolute;
+	top: 41px;
+	width: 100%;
+}
+#log-panel {
+	bottom: 0;
+	height: 200px;
+}
+
+.story-tasks {
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+.story-tasks>.progress-bar {
+	border-right: 1px dashed #CCCCCC;
+}
+.progress-bar-transparent {
+	background-color: transparent;
+}

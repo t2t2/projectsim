@@ -8,7 +8,7 @@ define(function (require) {
 		this.story = null;
 		this.assigned = null;
 		this.completed = false;
-	}
+	};
 
 	Task.prototype.workOn = function(effort) {
 		this.doneEffort += effort;
