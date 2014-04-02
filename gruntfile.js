@@ -34,6 +34,14 @@ module.exports = function(grunt) {
 					out: 'build/public/js/runner.js',
 				},
 			},
+			game: {
+				options: {
+					baseUrl: 'public/js',
+					mainConfigFile: 'public/js/game.js',
+					name: 'game',
+					out: 'build/public/js/game.js',
+				},
+			},
 		},
 
 		watch: {
@@ -56,7 +64,7 @@ module.exports = function(grunt) {
 
 
 	// Aliases
-	grunt.registerTask('build', ['clean:build', 'copy:build', 'requirejs:runner']);
+	grunt.registerTask('build', ['clean:build', 'copy:build', 'requirejs:runner', 'requirejs:game']);
 	
 	grunt.registerTask('default', ['build']);
 	grunt.registerTask('serve', ['connect:serve', 'watch:serve']);
