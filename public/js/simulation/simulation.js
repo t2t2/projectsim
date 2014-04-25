@@ -6,12 +6,13 @@ define(function (require) {
 	function Simulation(config) {
 		Sim.apply(this); // Run parent
 
-		this.config = _.defaults(_.mapValues(config, parseFloat), Simulation.defaults);
+		this.config = _.defaults(config, Simulation.defaults);
 
 		/* Creates simulation */
 		// Random number generators
 		this.random = {
 			effort: new Random(this.config.seed),
+			events: new Random(this.config.seed),
 			tasks: new Random(this.config.seed),
 		};
 
@@ -39,18 +40,25 @@ define(function (require) {
 			worker.name = 'Worker '+(n+1);
 			this.workers.push(worker);
 		}, this);
+
+		// Add random events manager
+		this.eventer = this.addEntity(require('simulation/entities/eventer'));
+
 	}
 
 	Simulation.defaults = {
 		daysPerSprint: 10,
 		duration: 400,
-		effortPerSprint: 300,
-		effortPerTask: 6,
+		effortPerTask: 5,
+		effortSigma: 1.2,
 		hoursInDay: 8,
-		seed: Math.floor(Math.random() * 1000000),
+		randomEventInterval: 7,
+		randomEventSigma: 1.3,
+		seed: 123456,
 		standUpMeetingLength: 15,
 		stories: 100,
 		tasksPerStory: 10,
+		tasksPerStorySigma: 2,
 		workers: 5,
 		workEffort: 1,
 	}
@@ -73,6 +81,31 @@ define(function (require) {
 		return Math.ceil(this.time()) - this.time();
 	};
 
+	Simulation.prototype.log = function(message, entity) {
+		if (!this.logger) return;
+
+		var day = Math.floor(this.simTime);
+		var time = this.simTime - day;
+
+		var hours = Math.floor(this.daysToHours(time));
+		var mins = Math.floor(this.daysToMins(time - this.hoursToDays(hours)));
+
+		var timeText = "Day "+day+" "+hours+"h"+mins+"m";
+		var entityMsg = "";
+		if (entity !== undefined) {
+			if (entity.name) {
+				entityMsg = " [" + entity.name + "]";
+			} else {
+				entityMsg = " [" + entity.id + "] ";
+			}
+		}
+
+
+		this.logger(timeText
+				+ entityMsg
+				+ "   " 
+				+ message);
+	};
 
 	/* Runs simulation */ 
 	Simulation.prototype.run = function () {

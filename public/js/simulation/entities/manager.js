@@ -20,14 +20,14 @@ define(function (require) {
 
 			// Generate config.stories user stories
 			_.times(this.sim.config.stories, function (n) {
-				var story = new UserStory('Story '+n);
+				var story = new UserStory('Story '+(n + 1));
 				// Also generate tasks
 				var taskCount = Math.round(this.sim.random.tasks.normal(this.sim.config.tasksPerStory, this.sim.config.tasksPerStorySigma));
 
 				_.times(taskCount, function (n) {
 					var effort = Math.round(this.sim.random.effort.normal(this.sim.config.effortPerTask, this.sim.config.effortSigma));
 
-					var task = new Task(story.name+' - Task '+n, effort);
+					var task = new Task(story.name+' - Task '+(n + 1), effort);
 					story.addTask(task);
 				}, this);
 

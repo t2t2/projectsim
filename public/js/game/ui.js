@@ -39,6 +39,7 @@ define(function (require) {
 				$('#modal-intro').modal('hide');
 
 				ui.chooseScenario(ui.scenarios[$(this).data('scenario')]);
+				return false;
 			});
 		},
 		log: function (text, classes) {
@@ -62,10 +63,13 @@ define(function (require) {
 						ui.onStandupMeeting();
 					} else if(e.type == 'sprint-review') {
 						ui.onSprintReview(e.data);
+					} else if(e.type == 'random-event') {
+						ui.onRandomEvent(e.data);
 					}
 				} else {
 					// Wherps :(
 					ui.error(e);
+					throw e;
 				}
 			}
 		},
@@ -86,6 +90,7 @@ define(function (require) {
 				} else {
 					// Wherps :(
 					ui.error(e);
+					throw e;
 				}
 			}
 
@@ -115,7 +120,13 @@ define(function (require) {
 				worker.$el = workerEl;
 			});
 
-			// Bind events
+			// Prepare random events modal
+			$('#modal-random-event').modal({
+				show: false,
+				// Don't allow manually closing
+				backdrop: 'static',
+				keyboard: false,
+			});
 
 			// Go on as normal
 			ui.onPlanningMeeting();
@@ -235,7 +246,7 @@ define(function (require) {
 			});
 
 			// Run simulation in a sec.
-			setTimeout(ui.run, 1000);
+			setTimeout(ui.run, 500);
 		},
 
 		// Update to match standup meetings
@@ -254,7 +265,7 @@ define(function (require) {
 			});
 
 			// Run simulation in a sec.
-			setTimeout(ui.run, 1000);
+			setTimeout(ui.run, 500);
 		},
 
 		// Show Sprint Review
@@ -280,6 +291,37 @@ define(function (require) {
 
 			ui.updateWorkersStatus();
 		},
+
+		// Handle random events
+		onRandomEvent: function (event) {
+			var eventTpl = require('text!../../templates/game/random-event.html');
+
+			var $el = $(Mustache.render(eventTpl, {
+				event: event,
+				choices: _.map(event.choices, function (choice, index) {
+					return {
+						index: index,
+						choice: choice,
+					}
+				}),
+			}));
+			$('#modal-random-event .modal-content').html($el);
+			$('#modal-random-event').modal('show');
+
+			// bind click events
+			$('#random-event-choices .list-group-item').click(function () {
+				var choiceI = $(this).data('choice');
+				ui.eventChoice(choiceI);
+
+				return false;
+			});
+		},
+		eventChoice: function(choiceI) {
+			$('#modal-random-event').modal('hide');
+			ui.sim.eventer.doChoice(choiceI);
+
+			setTimeout(ui.run, 500);
+		}
 	};
 	return ui;
 });

@@ -1,0 +1,13 @@
+<div class="modal-header">
+	<h4>Random Event!</h4>
+</div>
+<div class="modal-body">
+	<p>{{event.text}}</p>
+	<div id="random-event-choices" class="list-group">
+		{{#choices}}
+			<a data-choice="{{index}}" class="list-group-item" href="#">
+				<p class="list-group-item-text">{{choice.text}}</p>
+			</a>
+		{{/choices}}
+	</div>
+</div>

@@ -47,6 +47,7 @@ define(function (require) {
 
 			this.workOnIt();
 		},
+		timer: null,
 		workOnIt: function () {
 			if(!this.workingOn) return;
 			// Calculate how much left to work on.
@@ -55,13 +56,16 @@ define(function (require) {
 			var timeLeftToday = Math.ceil(this.time()) - this.time();
 			// How much to do today:
 			var workTime = Math.min(timeToDo, timeLeftToday);
-			var workEffort = this.sim.daysToHours(workTime) * this.sim.config.workEffort;
 
-			this.setTimer(workTime).done(this.deliverOnIt).setData(workEffort);
+			this.timer = this.setTimer(workTime).done(this.deliverOnIt).setData(this.time());
 		},
 		deliverOnIt: function () {
-			var doneEffort = this.callbackData;
-			this.workingOn.workOn(doneEffort);
+			var since = this.callbackData;
+
+			var workTime = this.time() - since;
+			var workEffort = this.sim.daysToHours(workTime) * this.sim.config.workEffort;
+
+			this.workingOn.workOn(workEffort);
 
 			// If done get next task
 			if(this.workingOn.completed) {
