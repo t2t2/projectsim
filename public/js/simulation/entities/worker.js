@@ -3,10 +3,13 @@ define(function (require) {
 
 	return {
 		start: function () {
+			this.effort = this.sim.random.effort.normal(this.sim.config.workEffort, this.sim.config.workEffortSigma);
+
 			this.waitEvent(this.sim.events.meeting).done(this.inMeeting);
 			this.waitEvent(this.sim.events.work).done(this.getToWork);
 		},
-
+		effort: null,
+		active: true,
 
 		workingOn: null,
 		nextTask: function () {
@@ -29,6 +32,7 @@ define(function (require) {
 		inMeeting: function () {
 			// Rewait for the event
 			this.waitEvent(this.sim.events.meeting).done(this.inMeeting);
+			if(!this.active) return;
 			// Find next task to work on
 			if(!this.workingOn) {
 				this.nextTask();
@@ -52,7 +56,7 @@ define(function (require) {
 			if(!this.workingOn) return;
 			// Calculate how much left to work on.
 			var effortToDo = this.workingOn.effort - this.workingOn.doneEffort;
-			var timeToDo = this.sim.hoursToDays(effortToDo / this.sim.config.workEffort)
+			var timeToDo = this.sim.hoursToDays(effortToDo / this.effort)
 			var timeLeftToday = Math.ceil(this.time()) - this.time();
 			// How much to do today:
 			var workTime = Math.min(timeToDo, timeLeftToday);
@@ -63,7 +67,7 @@ define(function (require) {
 			var since = this.callbackData;
 
 			var workTime = this.time() - since;
-			var workEffort = this.sim.daysToHours(workTime) * this.sim.config.workEffort;
+			var workEffort = this.sim.daysToHours(workTime) * this.effort;
 
 			this.workingOn.workOn(workEffort);
 
@@ -78,6 +82,10 @@ define(function (require) {
 			if(Math.ceil(this.time()) > this.time()) {
 				this.workOnIt();
 			}
+		},
+		giveItBack: function () {
+			this.unshiftQueue(this.sim.productBacklog, this.workingOn);
+			this.clearTask();
 		},
 	};
 });

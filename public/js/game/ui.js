@@ -155,8 +155,13 @@ define(function (require) {
 					};
 				}),
 			})).data('story', story);
-			story.$el.replaceWith(storyEl);
+			if(!story.$el) {
+				$('#container #user-stories-list').append(storyEl);
+			} else {
+				story.$el.replaceWith(storyEl);
+			}
 			story.$el = storyEl;
+
 
 			// Rebind onChange event if in planning meeting
 
@@ -318,7 +323,7 @@ define(function (require) {
 		},
 		eventChoice: function(choiceI) {
 			$('#modal-random-event').modal('hide');
-			ui.sim.eventer.doChoice(choiceI);
+			ui.sim.eventer.doChoice(choiceI, this);
 
 			setTimeout(ui.run, 500);
 		}

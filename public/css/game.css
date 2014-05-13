@@ -20,7 +20,7 @@
 }
 #user-stories-panel>.panel-body {
 	position: absolute;
-	top: 41px;
+	top: 0px;
 	bottom: 110px;
 	padding-top: 0;
 	padding-bottom: 0;

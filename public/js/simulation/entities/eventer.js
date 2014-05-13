@@ -29,14 +29,16 @@ define(function (require) {
 
 			throw new InputException('random-event', '', this.currentEvent);	
 		},
-		doChoice: function (choiceI) {
+		doChoice: function (choiceI, ui) {
 			if(!this.currentEvent || !this.currentEvent.choices[choiceI]) {
 				throw new Exception('Can\'t find the random event');
 			}
 
 			if(this.currentEvent.choices[choiceI].do) {
-				this.currentEvent.choices[choiceI].do.apply(this, [this.sim]);
+				this.currentEvent.choices[choiceI].do.apply(this, [this.sim, ui]);
 			}
+			// Queue up next random event
+			this.start();
 		}
 	};
 

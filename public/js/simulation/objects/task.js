@@ -12,7 +12,8 @@ define(function (require) {
 
 	Task.prototype.workOn = function(effort) {
 		this.doneEffort += effort;
-		if(this.doneEffort >= this.effort) {
+		if(this.effort - this.doneEffort < 0.0000001) { // Floating point shenanigans
+			this.doneEffort = this.effort;
 			this.completed = true;
 			this.story.doneTask(this);
 		}
